@@ -1,6 +1,7 @@
 extern crate walkdir;
 extern crate md5;
 use std::{env};
+use rayon::prelude::*;
 
 fn main() {
     let mut paths: Vec<String> = vec![];
@@ -18,16 +19,15 @@ fn main() {
     // lowercase every name so we are fine 
     paths.sort_by(|a, b| a.to_lowercase().cmp(&b.to_lowercase()));
 
-    //println!("{:?}", paths);
-
-    let mut hashcat = String::from("");
-    for f in paths {
-        let digest = md5::compute(f);
-        //dbg!(digest);
-        hashcat += &format!("{:x}", digest);
-    }
-
-    let digest_final = md5::compute(hashcat);
+    let mut s = String::new();
+    s = paths
+        .par_iter()
+        .map(|s| format!("{:x}", md5::compute(s)))
+        .collect::<Vec<String>>()
+        .join("");
+    //println!("{:?}", s);
+    
+    let digest_final = md5::compute(s);
     let output = &format!("{:x}", digest_final);
     print!("{}", output);
 }
