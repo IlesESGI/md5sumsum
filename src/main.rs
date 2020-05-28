@@ -14,10 +14,9 @@ fn main() {
             paths.push(String::from(entry.path().to_string_lossy()))
         }
     }
-
     // since it compares basing on Unicode code points, we have to
     // lowercase every name so we are fine 
-    paths.sort_by(|a, b| a.to_lowercase().cmp(&b.to_lowercase()));
+    //paths.sort_by(|a, b| a.to_lowercase().cmp(&b.to_lowercase()));
 
     let mut s = String::new();
     s = paths
